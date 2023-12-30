@@ -16,6 +16,6 @@ app.add_route('/hello', hello_world_resource)
 if __name__ == '__main__':
     from wsgiref import simple_server
 
-    httpd = simple_server.make_server('127.0.0.1', 8000, app)
-    print('Server started on http://127.0.0.1:8000')
+    httpd = simple_server.make_server('0.0.0.0', 8000, app)
+    print('Server started on port 8000.')
     httpd.serve_forever()
