@@ -1,0 +1,28 @@
+name: Deploy to Server
+
+on:
+  workflow_run:
+    workflows: ["Build and Publish"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Docker tag from artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: docker-tag
+          path: /tmp
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Server
+        run: |
+          DOCKER_TAG=$(cat /tmp/docker-tag)
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker pull $DOCKER_TAG"

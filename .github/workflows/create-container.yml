@@ -1,4 +1,4 @@
-name: Build and Publish Falcon App
+name: Build and Publish
 
 on:
   push:
@@ -62,3 +62,9 @@ jobs:
         run: |
           rm -rf ${{ env.CACHE_PATH }}
           mv ${{ env.CACHE_PATH }}-new ${{ env.CACHE_PATH }}
+
+      - name: Upload Docker tag as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: docker-tag
+          path: ${{ env.DOCKER_TAG }}
