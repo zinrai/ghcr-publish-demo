@@ -40,6 +40,7 @@ jobs:
           COMMIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
           TAG=${{ env.REGISTRY_NAME }}/${{ env.IMAGE_NAME }}:$COMMIT_HASH
           echo "DOCKER_TAG=$TAG" >> $GITHUB_ENV
+          echo "$TAG" > /tmp/doker-tag
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -67,4 +68,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: docker-tag
-          path: ${{ env.DOCKER_TAG }}
+          path: /tmp/docker-tag
