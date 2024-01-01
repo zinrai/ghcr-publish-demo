@@ -1,4 +1,4 @@
-name: Build and Publish
+name: Build and Publish and Deploy to Server
 
 on:
   push:
@@ -69,3 +69,23 @@ jobs:
         run: |
           rm -rf ${{ env.CACHE_PATH }}
           mv ${{ env.CACHE_PATH }}-new ${{ env.CACHE_PATH }}
+
+  deploy-to-server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Docker tag from artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-tag
+          path: .
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Server
+        run: |
+          DOCKER_TAG=$(cat docker-tag)
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker pull $DOCKER_TAG"
