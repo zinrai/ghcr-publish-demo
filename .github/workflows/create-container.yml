@@ -90,4 +90,6 @@ jobs:
       - name: Deploy to Server
         run: |
           DOCKER_TAG=$(cat docker-tag)
+          CONTAINER_NAME=hello_sample
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "sudo docker pull $DOCKER_TAG"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "(sudo docker ps -q --filter name=$CONTAINER_NAME | xargs -r sudo docker stop) && (sudo docker ps -a -q --filter name=$CONTAINER_NAME | xargs -r sudo docker rm $CONTAINER_NAME) && sudo docker run -d --name $CONTAINER_NAME -p 127.0.0.1:8000:8000 $DOCKER_TAG"
