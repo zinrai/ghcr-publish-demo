@@ -40,12 +40,12 @@ To build and run the Docker container locally:
 
 1. Build the image:
    ```
-   docker build -t hello_sample .
+   $ docker build -t hello_sample .
    ```
 
 2. Run the container:
    ```
-   docker run -p 8000:8000 hello_sample
+   $ docker run -p 8000:8000 hello_sample
    ```
 
 3. Access the API at `http://localhost:8000/hello`
@@ -58,8 +58,8 @@ To trigger the workflow:
 
 1. Create and push a new tag:
    ```
-   git tag v1.0.0
-   git push origin v1.0.0
+   $ git tag v1.0.0
+   $ git push origin v1.0.0
    ```
 
 2. The workflow will automatically run, building and publishing the image to GHCR with the tag `ghcr.io/zinrai/hello_sample:v1.0.0`
